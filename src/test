@@ -1,0 +1,10 @@
+let nombreCompleto = "Juan Pérez Gómez";
+let partes = nombreCompleto.split(" ");
+
+console.log(partes);
+
+let nombre = partes[0];
+let apellidos = partes[1];
+
+console.log("Nombre:", nombre); // Juan
+console.log("Apellidos:", apellidos);

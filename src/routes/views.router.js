@@ -20,9 +20,9 @@ router.get('/login', (req, res) => {
 
 router.get('/profile', (req, res) => {
     if (req.session.login) {
-        res.redirect('/login');
+        res.render('profile', {user: req.session.user});
     } else {
-        res.render('profile');
+        res.redirect('/login');
     }
 })
 

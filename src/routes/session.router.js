@@ -27,7 +27,7 @@ router.post('/register', async (req, res) => {
             role: newUser.role,
         });
 
-        res.status(201).send({message: 'User created successfully',token});
+        res.status(201).send({message: 'User created successfully',token}).redirect('/profile');
 
     } catch (error) {
         return res.status(400).send({error: error.message});
@@ -69,7 +69,7 @@ router.get('/github',passport.authenticate('github',{scope: ['user:email']}), as
 
 })
 
-router.get('/githubcallback',passport.authenticate('github',{failureRedirect:'/login'}), async (req, res) => {
+router.get('/githubcallback', passport.authenticate('github',{failureRedirect:'/login'}), async (req, res) => {
     //Github strategy will return the user, then we will use it to set in the session object
     req.session.user = req.user;
     req.session.login = true;

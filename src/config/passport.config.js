@@ -1,18 +1,16 @@
 import passport from "passport";
-import req from "express/lib/request.js";
 import UserModel from "../model/user.model.js";
-import {isValidPassword} from "../utils/utils.js";
-import userModel from "../model/user.model.js";
+import { createHash, isValidPassword} from "../utils/utils.js";
 import local from "passport-local";
 import GitHubStrategy from 'passport-github2';
 
 
-const LocalStrategy = local.Strategy
+const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
     passport.use('register', new LocalStrategy({
         passReqToCallback: true,
-        usernameField: 'email',
+        usernameField: 'email'
     }, async (req, username, password, done) => {
         const {first_name, last_name, email, age, cart, role} = req.body;
 
@@ -21,7 +19,7 @@ const initializePassport = () => {
             if (!user) {
                 return done(null, false);
             } else {
-                let newUser = await UserModel.create({first_name, last_name, email, age, cart, role});
+                let newUser = await UserModel.create({first_name, last_name, email, age, cart, role, password: createHash(password)});
                 return done(null, newUser);
             }
 
@@ -43,7 +41,6 @@ const initializePassport = () => {
                 } else {
                     return done(null, user);
                 }
-
             }
         } catch (error) {
             return done(error);
@@ -51,11 +48,11 @@ const initializePassport = () => {
     }))
 
     passport.serializeUser((user, done) => {
-        done(null, user);
+        done(null, user._id);
     })
 
     passport.deserializeUser(async (id, done) => {
-        let user = await userModel.findById({_id: id});
+        let user = await UserModel.findById({_id: id});
         done(null, user);
     })
 
@@ -70,10 +67,13 @@ const initializePassport = () => {
         try {
             let user = await UserModel.findOne({email: profile._json.email});
             if (!user) {
+                let name = profile._json.name.split(" ");
+                console.log('uno')
+
                 let newUser = await UserModel.create({
-                    first_name: profile._json.name,
-                    last_name: '',
-                    age: '',
+                    first_name: name[0],
+                    last_name: name[1],
+                    age: 0,
                     email: profile._json.email,
                     password: ''
                 })
