@@ -17,10 +17,10 @@ const initializePassport = () => {
         try {
             let user = await UserModel.findOne({email: email})
             if (!user) {
-                return done(null, false);
-            } else {
                 let newUser = await UserModel.create({first_name, last_name, email, age, cart, role, password: createHash(password)});
                 return done(null, newUser);
+            } else {
+                return done(null, false);
             }
 
         } catch (error) {
@@ -68,7 +68,6 @@ const initializePassport = () => {
             let user = await UserModel.findOne({email: profile._json.email});
             if (!user) {
                 let name = profile._json.name.split(" ");
-                console.log('uno')
 
                 let newUser = await UserModel.create({
                     first_name: name[0],

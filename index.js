@@ -5,7 +5,7 @@ import MongoStore from "connect-mongo";
 import './src/database/database.js';
 import morgan from "morgan";
 import 'dotenv/config';
-import * as path from "node:path";
+import path from "node:path";
 import passport from "passport";
 import initializePassport from "./src/config/passport.config.js";
 import {engine} from "express-handlebars";
